@@ -1,5 +1,8 @@
 package Conf;
 
+import entity.Assets;
+import entity.CodeAmortization;
+import entity.RespPerson;
 import entity.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -15,6 +18,9 @@ public class HibernateSessionFactoryUtil {
             try {
                 Configuration configuration = new Configuration().configure();
                 configuration.addAnnotatedClass(User.class);
+                configuration.addAnnotatedClass(CodeAmortization.class);
+                configuration.addAnnotatedClass(Assets.class);
+                configuration.addAnnotatedClass(RespPerson.class);
 
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());

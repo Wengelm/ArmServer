@@ -1,6 +1,7 @@
 package service;
 
 import Conf.HibernateSessionFactoryUtil;
+import entity.CodeAmortization;
 import entity.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -9,70 +10,67 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserServiceImpl implements UserService{
+public class CodeServiceImpl implements CodeService {
     @Override
-    public User findById(Long id) {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(User.class, id);
+    public CodeAmortization findById(Long id) {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(CodeAmortization.class, id);
     }
 
 
     @Override
-    public void save(User user) {
+    public void save(CodeAmortization code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.save(user);
+        session.save(code);
         tx1.commit();
         session.close();
     }
     @Override
-    public void update(User user) {
+    public void update(CodeAmortization code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.update(user);
+        session.update(code);
         tx1.commit();
         session.close();
     }
     @Override
-    public void delete(User user) {
+    public void delete(CodeAmortization code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.delete(user);
+        session.delete(code);
         tx1.commit();
         session.close();
 
     }
 
     @Override
-    public User findByLogin(String login) {
+    public CodeAmortization findByCode(String code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
 
-        Query q = session.createQuery("from User where login = :login", User.class);
-        q.setParameter("login", login);
+        Query q = session.createQuery("from CodeAmortization where code = :code", CodeAmortization.class);
+        q.setParameter("code", code);
         if(!q.getResultList().isEmpty()) {
-        User user = (User) q.getResultList().get(0);
-        tx1.commit();
-        session.close();
-        return user; }
+            CodeAmortization codeAmortization = (CodeAmortization) q.getResultList().get(0);
+            tx1.commit();
+            session.close();
+            return codeAmortization; }
 
-        return new User();
+        return new CodeAmortization();
 
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<CodeAmortization> getAllCodes() {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
 
-        Query q = session.createQuery("from User", User.class);
-        List<User> allUsers = new ArrayList<>();
-        User user = (User) q.getResultList().get(0);
-        allUsers.addAll(q.getResultList());
+        Query q = session.createQuery("from CodeAmortization ", CodeAmortization.class);
+
+        List<CodeAmortization> allCodes = new ArrayList<>(q.getResultList());
         tx1.commit();
         session.close();
-        return allUsers;
+        return allCodes;
 
     }
-
 }
-

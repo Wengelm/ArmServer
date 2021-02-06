@@ -1,35 +1,47 @@
 package entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "asset")
-public class Assets {
+public class Assets implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long inventoryNumber;
+    @Column
     private String name;
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name="id",insertable = false, updatable = false)
     private CodeAmortization codeAmortization;
+    @Column(name = "percent_amo")
     private String percentAmortization;
+    @Column(name = "type_assets")
     private String typeAssets;
+    @Column(name="balance_cost")
     private String balanceCost;
-    private String MonthAmortization;
+    @Column(name = "month_amort")
+    private String monthAmortization;
+    @Column(name = "dep_amount")
     private String deplicrationAmount;
+    @Column(name = "date_start")
     private String dateStart;
+    @Column(name = "ost_cost")
     private String ostCost;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "id",insertable = false, updatable = false)
     private RespPerson person;
 
-    public Assets(Long inventoryNumber, String name, CodeAmortization codeAmortization, String percentAmortization, String typeAssets, String balanceCost, String monthAmortization, String deplicrationAmount, String dateStart, String ostCost, RespPerson person) {
-        this.inventoryNumber = inventoryNumber;
+    public Assets() {
+    }
+
+    public Assets(String name, CodeAmortization codeAmortization, String percentAmortization, String typeAssets, String balanceCost, String monthAmortization, String deplicrationAmount, String dateStart, String ostCost, RespPerson person) {
         this.name = name;
         this.codeAmortization = codeAmortization;
         this.percentAmortization = percentAmortization;
         this.typeAssets = typeAssets;
         this.balanceCost = balanceCost;
-        MonthAmortization = monthAmortization;
+        this.monthAmortization = monthAmortization;
         this.deplicrationAmount = deplicrationAmount;
         this.dateStart = dateStart;
         this.ostCost = ostCost;
@@ -42,14 +54,6 @@ public class Assets {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getInventoryNumber() {
-        return inventoryNumber;
-    }
-
-    public void setInventoryNumber(Long inventoryNumber) {
-        this.inventoryNumber = inventoryNumber;
     }
 
     public String getName() {
@@ -93,11 +97,11 @@ public class Assets {
     }
 
     public String getMonthAmortization() {
-        return MonthAmortization;
+        return monthAmortization;
     }
 
     public void setMonthAmortization(String monthAmortization) {
-        MonthAmortization = monthAmortization;
+        this.monthAmortization = monthAmortization;
     }
 
     public String getDeplicrationAmount() {

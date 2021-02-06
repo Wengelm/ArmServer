@@ -20,19 +20,14 @@ public class ThreadServer extends Thread {
     }
 
     public void run() {
-        Integer idOperation;
+        int idOperation;
         ServerWork obj = new ServerWork(out, in);
         try {
-            while (true) {
-                String bufString = (String) in.readObject();
-                if (bufString.equals("END")) {
-                    System.out.println("Сервер отсоединен от базы данных");
-                    break;
-                }
-                idOperation = Integer.parseInt(bufString);
-                obj.getId(idOperation);
-            }
-            System.out.println("Клиент был отсоединен");
+             while (socket.isConnected()) {
+
+                 idOperation = (int) in.readObject();
+                 obj.getId(idOperation);
+             }
         }
         catch (IOException | ClassNotFoundException ex) {
             System.err.println("IO Exception");

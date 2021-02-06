@@ -14,7 +14,6 @@ public class Server {
         try {
             while (true) {
                 Socket socket = servSocket.accept();
-                System.out.println("Был подключен новый клиент");
                 try {
                     new ThreadServer(socket);
                 }

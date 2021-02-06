@@ -2,19 +2,24 @@ package entity;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "person")
-public class RespPerson {
+public class RespPerson implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "person_id")
+    @Column(name = "id")
     private Long id;
+    @Column
     private String name;
+    @Column(name = "last_name")
     private String lastName;
+    @Column
     private String pasport;
+    @Column(name="birt_day")
     private String birrthDay;
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Assets> assetsList;
@@ -27,6 +32,8 @@ public class RespPerson {
         assetsList = new ArrayList<>();
     }
 
+    public RespPerson() {
+    }
 
     public void addAssets(Assets assets) {
         assets.setPerson(this);

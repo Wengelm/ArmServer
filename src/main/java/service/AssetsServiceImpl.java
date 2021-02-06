@@ -1,78 +1,79 @@
 package service;
 
 import Conf.HibernateSessionFactoryUtil;
-import entity.User;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import entity.Assets;
+import entity.CodeAmortization;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import sun.misc.ASCIICaseInsensitiveComparator;
 
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserServiceImpl implements UserService{
+public class AssetsServiceImpl implements AssetsService{
+
     @Override
-    public User findById(Long id) {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(User.class, id);
+    public Assets findById(Long id) {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(Assets.class, id);
     }
 
 
     @Override
-    public void save(User user) {
+    public void save(Assets code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.save(user);
+        session.save(code);
         tx1.commit();
         session.close();
     }
     @Override
-    public void update(User user) {
+    public void update(Assets code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.update(user);
+        session.update(code);
         tx1.commit();
         session.close();
     }
     @Override
-    public void delete(User user) {
+    public void delete(Assets code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.delete(user);
+        session.delete(code);
         tx1.commit();
         session.close();
 
     }
 
     @Override
-    public User findByLogin(String login) {
+    public Assets findByName(String name) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
 
-        Query q = session.createQuery("from User where login = :login", User.class);
-        q.setParameter("login", login);
+        Query q = session.createQuery("from Assets where name = :name", Assets.class);
+        q.setParameter("name", name);
         if(!q.getResultList().isEmpty()) {
-        User user = (User) q.getResultList().get(0);
-        tx1.commit();
-        session.close();
-        return user; }
+            Assets assets = (Assets) q.getResultList().get(0);
+            tx1.commit();
+            session.close();
+            return assets; }
 
-        return new User();
+        return new Assets();
 
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<Assets> getAllAssets() {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
 
-        Query q = session.createQuery("from User", User.class);
-        List<User> allUsers = new ArrayList<>();
-        User user = (User) q.getResultList().get(0);
-        allUsers.addAll(q.getResultList());
+        Query q = session.createQuery("from Assets n ", Assets.class);
+
+        List<Assets> assets = new ArrayList<>(q.getResultList());
         tx1.commit();
         session.close();
-        return allUsers;
+        return assets;
 
     }
-
 }
-

@@ -1,7 +1,8 @@
 package service;
 
 import Conf.HibernateSessionFactoryUtil;
-import entity.User;
+import entity.CodeAmortization;
+import entity.RespPerson;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -9,70 +10,69 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserServiceImpl implements UserService{
+public class RespPersonServiceImpl implements RespPersonService {
+
+
     @Override
-    public User findById(Long id) {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(User.class, id);
+    public RespPerson findById(Long id) {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(RespPerson.class, id);
     }
 
 
     @Override
-    public void save(User user) {
+    public void save(RespPerson code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.save(user);
+        session.save(code);
         tx1.commit();
         session.close();
     }
     @Override
-    public void update(User user) {
+    public void update(RespPerson code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.update(user);
+        session.update(code);
         tx1.commit();
         session.close();
     }
     @Override
-    public void delete(User user) {
+    public void delete(RespPerson code) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.delete(user);
+        session.delete(code);
         tx1.commit();
         session.close();
 
     }
 
     @Override
-    public User findByLogin(String login) {
+    public RespPerson findByName(String name) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
 
-        Query q = session.createQuery("from User where login = :login", User.class);
-        q.setParameter("login", login);
+        Query q = session.createQuery("from RespPerson where name = :name", RespPerson.class);
+        q.setParameter("name", name);
         if(!q.getResultList().isEmpty()) {
-        User user = (User) q.getResultList().get(0);
-        tx1.commit();
-        session.close();
-        return user; }
+            RespPerson respPerson = (RespPerson) q.getResultList().get(0);
+            tx1.commit();
+            session.close();
+            return respPerson; }
 
-        return new User();
+        return new RespPerson();
 
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<RespPerson> getAllPersons() {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
 
-        Query q = session.createQuery("from User", User.class);
-        List<User> allUsers = new ArrayList<>();
-        User user = (User) q.getResultList().get(0);
-        allUsers.addAll(q.getResultList());
+        Query q = session.createQuery("from RespPerson ", RespPerson.class);
+
+        List<RespPerson> allCodes = new ArrayList<>(q.getResultList());
         tx1.commit();
         session.close();
-        return allUsers;
+        return allCodes;
 
     }
-
 }
-
